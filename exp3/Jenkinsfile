@@ -11,7 +11,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                bat 'if not exist exp3\\missing.html exit /b 1'
+                bat 'if not exist exp3\\index.html exit /b 1'
                 bat 'findstr /C:"Student Task Tracker" exp3\\index.html'
                 echo 'HTML test passed'
             }
