@@ -5,15 +5,14 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
                 echo 'Source code checked out'
             }
         }
 
         stage('Test') {
             steps {
-                bat 'if not exist index.html exit /b 1'
-                bat 'findstr /C:"Student Task Tracker" index.html'
+                bat 'if not exist exp3\\index.html exit /b 1'
+                bat 'findstr /C:"Student Task Tracker" exp3\\index.html'
                 echo 'HTML test passed'
             }
         }
@@ -21,7 +20,7 @@ pipeline {
         stage('Build') {
             steps {
                 bat 'if not exist build mkdir build'
-                bat 'copy /Y index.html build\\index.html'
+                bat 'copy /Y exp3\\index.html build\\index.html'
             }
         }
 
