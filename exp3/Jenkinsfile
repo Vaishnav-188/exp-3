@@ -1,40 +1,43 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Student Task Tracker</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f5fa;
-      text-align: center;
-      padding: 50px;
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+                echo 'Source code checked out'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                bat 'if not exist index.html exit /b 1'
+                bat 'findstr /C:"Student Task Tracker" index.html'
+                echo 'HTML test passed'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                bat 'if not exist build mkdir build'
+                bat 'copy /Y index.html build\\index.html'
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                bat 'if exist build\\index.html (echo Deployment successful) else (exit /b 1)'
+            }
+        }
     }
-    .card {
-      background: white;
-      padding: 25px;
-      margin: auto;
-      max-width: 500px;
-      border-radius: 12px;
+
+    post {
+        success {
+            echo 'CI/CD Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check Console Output.'
+        }
     }
-    li {
-      text-align: left;
-      margin: 12px;
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    <h1>Student Task Tracker</h1>
-    <p>DevOps CI/CD Practical</p>
-    <ul>
-      <li>Complete lab record - Done</li>
-      <li>Test Jenkins pipeline - In Progress</li>
-      <li>Revise theory - Pending</li>
-    </ul>
-    <p>Application built and deployed through Jenkins.</p>
-  </div>
-</body>
-</html>
+}
